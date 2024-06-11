@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<header class="bg-dark py-3" xmlns="http://www.w3.org/1999/html">
+            <div class="container px-4 px-lg-5 my-3">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Register an Account</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Buckle up to get ready to enter the Multiverse to shop</p>
+                </div>
+            </div>
+        </header>
+
+<!--- added form
+--->
+<div class="container">
+            <div class="row">
+
+                    <div class="col-md-6 offset-md-3" ></br>
+<form method="post" action="{% url 'register' %}">
+    {% csrf_token %}
+<!--    It outputs each form field as a paragraph (<p>). Each field will be wrapped in a <p> tag along with its associated label and error messages.-->
+        {{ form.as_p }}
+    <br/><br/>
+    <button type="submit" class="btn btn-secondary"> Register </button>
+
+
+
+</form>
+
+                    </br> </br></br> </br></br> </br></div></div></div>
+{% endblock %}
