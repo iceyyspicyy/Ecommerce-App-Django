@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 
 #for user registration the below 3 imports
@@ -12,14 +12,15 @@ from .forms import SignUpForm
 from django.contrib import messages
 
 
-
 # Create your views here.
 def home(request):
     products = Product.objects.all()
-    return render(request, 'home.html', {'products':products})
+    return render(request, 'home.html', {'products': products})
+
 
 def about(request):
     return render(request, 'about.html')
+
 
 def login_user(request):
     if request.method == "POST":
@@ -53,7 +54,7 @@ def register_user(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             #login the user
-            user = authenticate(username=username, password = password)
+            user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, "Registered successfully..")
             return redirect('home')
@@ -61,4 +62,24 @@ def register_user(request):
             messages.success(request, "Oops. Account registration failed")
             return redirect('register')
     else:
-        return render(request, 'register.html', {'form':form})
+        return render(request, 'register.html', {'form': form})
+
+
+def product(request, pk):
+    product = Product.objects.get(id=pk)
+    return render(request, 'product.html', {'product': product})
+
+def category(request, foo):
+    #replace hyphen with space
+    foo = foo.replace('-', ' ')
+    #grab category from url
+    try:
+        #Look up category
+        category = Category.objects.get(name=foo)
+        products = Product.objects.filter(category=category)
+        return render(request, 'category.html', {'products':products, 'category':category})
+    except:
+        messages.success(request, "Category invalid")
+        return redirect('home')
+
+
