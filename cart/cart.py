@@ -15,14 +15,14 @@ class Cart():
         self.cart = cart
 
 
-def add(self, product):
-    product_id = str(product.id)
+    def add(self, product):
+        product_id = str(product.id)
 
-    #logic if they have already added to cart
-    if product_id in self.cart:
-        pass
-    else:
-        self.cart[product_id] = {'price': str(product.price)}
-    
-    self.session.modified = True
+        #logic if they have already added to cart
+        if product_id in self.cart:
+            pass
+        else:
+            self.cart[product_id] = {'price': str(product.price)}
+        
+        self.session.modified = True
 

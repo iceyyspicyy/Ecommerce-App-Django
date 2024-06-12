@@ -55,12 +55,13 @@
 
              success: function(json){
                 console.log(json)
-             }
+             },
              error: function(xhr, errmsg, err){
+                console.error(xhr.status + ": " + xhr.responseText);
 
              }
         });
-    })
+    });     
 </script>
 
 {% endblock %}
