@@ -1,0 +1,17 @@
+[33mcommit 404df8a027f68ebf67869a4da67c0d7c0bc625f6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: iceyyspicyy <aryen.mhrzn@outlook.com>
+Date:   Wed Jun 12 08:27:41 2024 +0545
+
+    addtocart not working
+
+[33mcommit 84a977fb3de7b3193f84c76cf7f40bca0ed75f24[m
+Author: iceyyspicyy <aryen.mhrzn@outlook.com>
+Date:   Tue Jun 11 14:20:48 2024 +0545
+
+    added login, signup and sales for product
+
+[33mcommit 7a376c13870c7b40ab61b853e72314b1dbfdb955[m
+Author: iceyyspicyy <aryen.mhrzn@outlook.com>
+Date:   Mon Jun 10 18:57:19 2024 +0545
+
+    day 1 - added models and html template from bootstrap, no views initiazed
