@@ -1,4 +1,5 @@
-
+from store.models import Product
+import datetime
 
 class Cart():
     def __init__(self, request):
@@ -17,6 +18,7 @@ class Cart():
 
     def add(self, product):
         product_id = str(product.id)
+        
 
         #logic if they have already added to cart
         if product_id in self.cart:
@@ -26,3 +28,17 @@ class Cart():
         
         self.session.modified = True
 
+    def __len__(self):
+        return len(self.cart)
+    
+
+
+    def get_prods(self):
+        #get ids from cart
+        product_ids = self.cart.keys()
+
+        #use ids to lookup products from database
+        products = Product.objects.filter(id__in=product_ids)
+
+        #return products of result
+        return products
