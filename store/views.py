@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Product, Category
+from .models import Product, Category, Profile
 from django.contrib.auth import authenticate, login, logout
 
 #for user registration the below 3 imports
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 
 #gives messages if its wrong when logging in
 from django.contrib import messages
@@ -56,8 +56,8 @@ def register_user(request):
             #login the user
             user = authenticate(username=username, password=password)
             login(request, user)
-            messages.success(request, "Registered successfully..")
-            return redirect('home')
+            messages.success(request, "User Created. Please fill your details")
+            return redirect('update_info')
         else:
             messages.success(request, "Oops. Account registration failed")
             return redirect('register')
@@ -127,4 +127,19 @@ def update_password(request):
             return render(request, 'update_password.html', {'form': form})
     else:
         messages.success(request, "Must be logged in")
+        return redirect('home')
+    
+
+def update_info(request):
+    if request.user.is_authenticated:
+        current_user = Profile.objects.get(user__id=request.user.id)
+        form = UserInfoForm(request.POST or None, instance=current_user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your Information has been updated!!")
+            return redirect('home')
+        return render(request, 'update_info.html', {'form':form})
+    else:
+        messages.success(request, "You must be logged in first")
         return redirect('home')
