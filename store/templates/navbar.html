@@ -7,18 +7,11 @@
 
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                        {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
-                        {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                        {% endif %}
-
-
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Brands</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'home' %}">All Products</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category_summary' %}">All Brands</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="{% url 'category' 'Apple' %}">Apple</a></li>
                                 <li><a class="dropdown-item" href="{% url 'category' 'Samsung' %}">Samsung</a></li>
@@ -26,10 +19,19 @@
                                 <li><a class="dropdown-item" href="{% url 'category' 'Nokia' %}">Nokia</a></li>
                             </ul>
                         </li>
-                        {% if user.is_authenticated %}
-                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}"> Logged in as: {{user}} </a></li>
+                        
 
+                        {% if user.is_authenticated %}
+                         <li class="nav-item"><a class="nav-link" href="{% url 'update_user' %}"> Logged in as: {{user}} </a></li>
+                         <li class="nav-item"><a class="nav-link" href="{% url 'update_user' %}"> Profile </a></li>
                         {% endif %}
+                        {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                        {% endif %}
+                        
                     </ul>
 
                     <form class="d-flex">

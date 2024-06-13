@@ -5,8 +5,8 @@
 <header class="bg-dark py-3" xmlns="http://www.w3.org/1999/html">
             <div class="container px-4 px-lg-5 my-3">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Register an Account</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Buckle up to get ready to enter the Multiverse to shop</p>
+                    <h1 class="display-4 fw-bolder">Update User Profile</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Change your stuffs</p>
                 </div>
             </div>
         </header>
@@ -16,12 +16,12 @@
             <div class="row">
 
                     <div class="col-md-6 offset-md-3" ></br>
-<form method="post" action="{% url 'register' %}">
+<form method="post" action="{% url 'update_user' %}">
     {% csrf_token %}
-    {{ form.as_p }}
-
+ 
+    {{ user_form.as_p }}
     <br/><br/>
-    <button type="submit" class="btn btn-secondary"> Register </button>
+    <button type="submit" class="btn btn-secondary"> Update Profile </button>
 
 
 

@@ -72,6 +72,7 @@
                 //console.log(json) 
 
                 document.getElementById("cart_quantity").textContent = json.qty
+                location.reload();
              },
              error: function(xhr, errmsg, err){
                 console.error(xhr.status + ": " + xhr.responseText);
