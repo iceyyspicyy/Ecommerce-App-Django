@@ -1,9 +1,11 @@
-from store.models import Product
+from store.models import Product, Profile
 import datetime
 
 class Cart():
     def __init__(self, request):
         self.session = request.session
+        #get request
+        self.request = request
 
         #get current session key if it exists
         cart = self.session.get('session_key')
@@ -29,6 +31,20 @@ class Cart():
 
         
         self.session.modified = True
+
+        #deal with login users
+        if self.request.user.is_authenticated:
+            #get current user profile
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+
+            #convert single ' quotation to "double quotation,
+            #cause we convert to JSON and JSOn doesnt work with single quotation
+            carty = str(self.cart)
+            carty = carty.replace("\'","\"")
+
+            #save the modified cart to Profile Model
+            current_user.update(old_cart = carty)
+
 
     def __len__(self):
         return len(self.cart)

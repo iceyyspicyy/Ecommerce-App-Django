@@ -10,7 +10,26 @@ from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 
 #gives messages if its wrong when logging in
 from django.contrib import messages
+#can make multiple queries together
+from django.db.models import Q
 
+
+def search(request):
+    #detemine if text for search is filled
+    if request.method == "POST":
+        searched = request.POST['searched']
+        #query the product in dbmodel
+        searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched))
+        #test for null
+        if not searched:
+            messages.success(request, "Item not found")
+            return render(request, 'search.html', {})
+        else:
+            return render(request, 'search.html', {'searched':searched})
+    
+        
+    else:
+        return render(request, 'search.html', {})
 
 # Create your views here.
 def home(request):
