@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm, UpdateUserForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 #gives messages if its wrong when logging in
 from django.contrib import messages
@@ -103,4 +103,28 @@ def update_user(request):
         return render(request, 'update_user.html', {'user_form':user_form})
     else:
         messages.success(request, "You must be logged in first")
+        return redirect('home')
+    
+
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        #check if they filled the form
+        if request.method == 'POST':
+            form = ChangePasswordForm(current_user, request.POST)
+            #is the form valid
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Password updated successfully.")
+                login(request, current_user)
+                return redirect('update_user')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+                    return redirect('update_password')
+        else:
+            form = ChangePasswordForm(current_user)
+            return render(request, 'update_password.html', {'form': form})
+    else:
+        messages.success(request, "Must be logged in")
         return redirect('home')
