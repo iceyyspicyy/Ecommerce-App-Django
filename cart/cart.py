@@ -17,6 +17,34 @@ class Cart():
     #make cart is available on all pages
         self.cart = cart
 
+#for login persence of cart
+    def db_add(self, product, quantity):
+        product_id = str(product)
+        product_qty = str(quantity)
+
+        #logic if they have already added to cart
+        if product_id in self.cart:
+            pass
+        else:
+            # self.cart[product_id] = {'price': str(product.price)}
+            self.cart[product_id] = int(product_qty)
+
+        self.session.modified = True
+
+        #deal with login users
+        if self.request.user.is_authenticated:
+            #get current user profile
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+
+            #convert single ' quotation to "double quotation,
+            #cause we convert to JSON and JSOn doesnt work with single quotation
+            carty = str(self.cart)
+            carty = carty.replace("\'","\"")
+
+            #save the modified cart to Profile Model
+            current_user.update(old_cart = carty)
+
+
 
     def add(self, product, quantity):
         product_id = str(product.id)
@@ -77,6 +105,19 @@ class Cart():
 
         self.session.modified = True
 
+        
+
+        if self.request.user.is_authenticated:
+            #get current user profile
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+
+            #convert single ' quotation to "double quotation,
+            #cause we convert to JSON and JSOn doesnt work with single quotation
+            carty = str(self.cart)
+            carty = carty.replace("\'","\"")
+
+            #save the modified cart to Profile Model
+            current_user.update(old_cart = carty)
         thing = self.cart
         return thing
 
@@ -87,6 +128,17 @@ class Cart():
             del self.cart[product_id]
 
         self.session.modified = True
+        if self.request.user.is_authenticated:
+            #get current user profile
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+
+            #convert single ' quotation to "double quotation,
+            #cause we convert to JSON and JSOn doesnt work with single quotation
+            carty = str(self.cart)
+            carty = carty.replace("\'","\"")
+
+            #save the modified cart to Profile Model
+            current_user.update(old_cart = carty)
 
 
     def cart_total(self):

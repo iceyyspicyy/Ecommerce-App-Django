@@ -12,7 +12,8 @@ from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 from django.contrib import messages
 #can make multiple queries together
 from django.db.models import Q
-
+import json
+from cart.cart import Cart
 
 def search(request):
     #detemine if text for search is filled
@@ -48,6 +49,24 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            #shopping cart persistence stuff
+            current_user = Profile.objects.get(user__id=request.user.id)
+
+            #get their saved cart info
+            saved_cart = current_user.old_cart
+
+            #change database string to py dictionary
+            if saved_cart:
+                #convert to dictionary using JSON
+                converted_cart = json.loads(saved_cart)
+                #add the loaded dictionary to our session
+                cart = Cart(request)
+
+                #loop through the cart and add item from the database
+                for key,value in converted_cart.items():
+                    cart.db_add(product=key, quantity=value)
+
+
             messages.success(request, "You have successfully entered the verse!!")
             return redirect('home')
         else:
