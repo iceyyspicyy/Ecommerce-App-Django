@@ -16,10 +16,14 @@
             <div class="row">
 
                     <div class="col-md-6 offset-md-3" ></br>
+                        <strong> Billing Information </strong>
 <form method="post" action="{% url 'update_info' %}">
     {% csrf_token %}
  
     {{ form.as_p }}
+    <br></br>
+    <strong>Shipping Information</strong>
+    {{ shipping_form.as_p}}
     <br/><br/>
     <button type="submit" class="btn btn-secondary"> Add Information </button>
 
