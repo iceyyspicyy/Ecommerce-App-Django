@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+</br>
+        <div class="container">
+            <div class="row">
+                <center>
+                    <div class="col-8" >
+                       <br/>
+                       
+                       <div class="card">
+                        <div class="card-header">
+                          Order {{ order.id }} - ${{order.amount_paid}}
+                        </div>
+                        <div class="card-body">
+                          Email: {{ order.email }}  </br>
+                          {% if order.date_shipped %}
+                          Shipped Date: {{ order.date_shipped }} </br>
+                          {% else %}
+                          Order Date: {{ order.date_ordered }}  </br>
+                          {% endif %}
+                          Full Name: {{ order.full_name }} </br>
+                          Shipping Address: <pre>{{ order.shipping_address }}</pre> </br>
+                        
+                          {% for item in items %}
+                          {{ item.product }} - {{ item.quantity }} - ${{ item.price }} </br>               
+                         {% endfor %}
+
+                         <br><br/>
+                         {% if not order.shipped %}
+                         <form method="POST">
+                            {% csrf_token %}
+
+                            <input type="hidden" name="shipping_status" value="true">
+                            <button type="Submit" class="btn btn-success"> MARK AS SHIPPED </button>
+                        </form>
+                         
+                         {% else %}
+                         <form method="POST">
+                            {% csrf_token %}
+
+                            <input type="hidden" name="shipping_status" value="false">
+                             <button type="Submit" class="btn btn-danger"> MARK AS NOT SHIPPED </button>
+                            </form>
+                         <!-- not shipped -->
+                         {% endif %}
+
+
+                         
+                        </div>
+                      </div>
+                    </br></br></br>
+
+                    </div>
+                </center>
+            </div>
+        </div>
+{% endblock %}

@@ -4,12 +4,55 @@ from payment.forms import ShippingForm, PaymentForm
 from payment.models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
-from store.models import Product
+from store.models import Product, Profile
+import datetime
 # Create your views here.
+def orders(request, pk):
+    if request.user.is_authenticated and request.user.is_superuser:
+        #get order
+        order = Order.objects.get(id=pk)
+        #get order items
+        items = OrderItem.objects.filter(order=pk)
+
+        if request.POST:
+            status = request.POST['shipping_status']
+            if status == 'true':
+                order = Order.objects.filter(id=pk)
+                #update status
+                now = datetime.datetime.now()
+                order.update(shipped=True, date_shipped=now)
+              
+            else:
+                order = Order.objects.filter(id=pk)
+                #update status
+                order.update(shipped=False)
+            messages.success(request, "Shipping Status Updated")
+            return redirect('home')
+
+
+        return render (request, 'payment/orders.html', {"order":order, "items":items})
+    else:
+        messages.success(request,"Access Denied")
+        return redirect('home')
+
+
+
 def shipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
         orders = Order.objects.filter(shipped=True)
+        if request.POST:
+            status = request.POST['shipping_status']
+            num = request.POST['num']
+            order = Order.objects.filter(id=num)
+            
+            now = datetime.datetime.now()
+            order.update(shipped=False)
+              
+           
+            messages.success(request, "Shipping Status Updated")
+            return redirect('home')
         return render(request, 'payment/shipped_dash.html', {"orders":orders})
+
     else:
         messages.success(request,"Access Denied!")
         return redirect('home')
@@ -18,6 +61,17 @@ def shipped_dash(request):
 def not_shipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
         orders = Order.objects.filter(shipped=False)
+        if request.POST:
+            status = request.POST['shipping_status']
+            num = request.POST['num']
+            order = Order.objects.filter(id=num)
+            
+            now = datetime.datetime.now()
+            order.update(shipped=True, date_shipped=now)
+              
+           
+            messages.success(request, "Shipping Status Updated")
+            return redirect('home')
 
         return render(request, 'payment/not_shipped_dash.html', {"orders":orders})
     else:
@@ -112,6 +166,11 @@ def process_order(request):
                 if key == "session_key":
                     #delete key
                     del request.session[key]
+
+            #delete from database i.e. old_cart
+            current_user = Profile.objects.filter(user__id = request.user.id)
+
+            current_user.update(old_cart="")
 
 
             messages.success(request,"Order Placed! Jingle Bells!")
