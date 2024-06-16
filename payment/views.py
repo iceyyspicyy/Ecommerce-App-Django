@@ -169,6 +169,7 @@ def process_order(request):
 
             #delete from database i.e. old_cart
             current_user = Profile.objects.filter(user__id = request.user.id)
+            
 
             current_user.update(old_cart="")
 
